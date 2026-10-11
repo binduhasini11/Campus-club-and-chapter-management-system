@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club and Chapter Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">CC</div>
+            <div>
+                <h2>Campus Clubs</h2>
+                <p>Management System</p>
+            </div>
+        </div>
+
+        <p class="nav-label">MAIN MENU</p>
+
+        <nav>
+            <button class="nav-item active" data-page="dashboard">
+                Dashboard
+            </button>
+            <button class="nav-item" data-page="students">
+                Students
+            </button>
+            <button class="nav-item" data-page="clubs">
+                Clubs
+            </button>
+            <button class="nav-item" data-page="chapters">
+                Chapters
+            </button>
+            <button class="nav-item" data-page="memberships">
+                Memberships
+            </button>
+            <button class="nav-item" data-page="events">
+                Events
+            </button>
+            <button class="nav-item" data-page="registrations">
+                Registrations
+            </button>
+            <button class="nav-item" data-page="attendance">
+                Attendance
+            </button>
+            <button class="nav-item" data-page="feedback">
+                Feedback
+            </button>
+            <button class="nav-item" data-page="resources">
+                Resources
+            </button>
+            <button class="nav-item" data-page="finance">
+                Finance
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            DBMS Project · Phase 2
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">CAMPUS ADMINISTRATION</p>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+
+            <div class="connection-status">
+                <span class="status-dot"></span>
+                <span id="connection-text">Checking connection...</span>
+            </div>
+        </header>
+
+        <div id="notification" class="notification hidden"></div>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active">
+            <div class="welcome">
+                <div>
+                    <h2>Club & Chapter Overview</h2>
+                    <p>
+                        Monitor students, clubs, memberships and campus events
+                        from one place.
+                    </p>
+                </div>
+                <button class="button secondary" onclick="loadDashboard()">
+                    Refresh Data
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <article class="stat-box">
+                    <p>Total Students</p>
+                    <h2 id="stat-students">—</h2>
+                </article>
+
+                <article class="stat-box">
+                    <p>Active Clubs</p>
+                    <h2 id="stat-clubs">—</h2>
+                </article>
+
+                <article class="stat-box">
+                    <p>Total Chapters</p>
+                    <h2 id="stat-chapters">—</h2>
+                </article>
+
+                <article class="stat-box">
+                    <p>Total Events</p>
+                    <h2 id="stat-events">—</h2>
+                </article>
+
+                <article class="stat-box">
+                    <p>Memberships</p>
+                    <h2 id="stat-memberships">—</h2>
+                </article>
+
+                <article class="stat-box">
+                    <p>Registrations</p>
+                    <h2 id="stat-registrations">—</h2>
+                </article>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Upcoming Events & Activities</h2>
+                        <p>Events recorded in the database</p>
+                    </div>
+                    <button class="button secondary"
+                            onclick="navigateTo('events')">
+                        View Events
+                    </button>
+                </div>
+
+                <div id="dashboard-events" class="table-container">
+                    Loading events...
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDENTS -->
+        <section id="students" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Student Directory</h2>
+                        <p>Student records stored in Oracle Database</p>
+                    </div>
+                    <button class="button primary"
+                            onclick="loadPageData('students')">
+                        Refresh
+                    </button>
+                </div>
+                <div id="students-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- CLUBS -->
+        <section id="clubs" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Club Management</h2>
+                        <p>View and create student clubs</p>
+                    </div>
+                </div>
+
+                <form id="club-form" class="form-grid">
+                    <label>
+                        Club Name *
+                        <input name="club_name" required maxlength="100">
+                    </label>
+
+                    <label>
+                        Category
+                        <input name="category" maxlength="50"
+                               placeholder="Technical, Cultural, etc.">
+                    </label>
+
+                    <label>
+                        Date Established
+                        <input name="date_established" type="date">
+                    </label>
+
+                    <label>
+                        Status
+                        <select name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </label>
+
+                    <label class="full-width">
+                        Description
+                        <textarea name="description" maxlength="500"
+                                  rows="3"></textarea>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Add Club
+                        </button>
+                    </div>
+                </form>
+
+                <div id="clubs-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- CHAPTERS -->
+        <section id="chapters" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Chapter Directory</h2>
+                        <p>Chapters associated with clubs</p>
+                    </div>
+                    <button class="button secondary"
+                            onclick="loadPageData('chapters')">
+                        Refresh
+                    </button>
+                </div>
+                <div id="chapters-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- MEMBERSHIPS -->
+        <section id="memberships" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Club Memberships</h2>
+                        <p>Assign students to clubs and roles</p>
+                    </div>
+                </div>
+
+                <form id="membership-form" class="form-grid">
+                    <label>
+                        Student ID *
+                        <select name="student_id" id="membership-student"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Club *
+                        <select name="club_id" id="membership-club"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Role *
+                        <select name="role_id" id="membership-role"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Join Date *
+                        <input name="join_date" type="date" required>
+                    </label>
+
+                    <label>
+                        Status
+                        <select name="membership_status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Add Membership
+                        </button>
+                    </div>
+                </form>
+
+                <div id="memberships-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- EVENTS -->
+        <section id="events" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Event Management</h2>
+                        <p>Create and view campus events</p>
+                    </div>
+                </div>
+
+                <form id="event-form" class="form-grid">
+                    <label>
+                        Event Name *
+                        <input name="event_name" required maxlength="150">
+                    </label>
+
+                    <label>
+                        Club *
+                        <select name="club_id" id="event-club" required></select>
+                    </label>
+
+                    <label>
+                        Venue *
+                        <select name="venue_id" id="event-venue" required></select>
+                    </label>
+
+                    <label>
+                        Event Date
+                        <input name="event_date" type="date">
+                    </label>
+
+                    <label>
+                        Start Time
+                        <input name="start_time" type="datetime-local">
+                    </label>
+
+                    <label>
+                        End Time
+                        <input name="end_time" type="datetime-local">
+                    </label>
+
+                    <label>
+                        Capacity
+                        <input name="capacity" type="number"
+                               min="1" max="999999">
+                    </label>
+
+                    <label>
+                        Status
+                        <select name="event_status">
+                            <option value="Planned">Planned</option>
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </label>
+
+                    <label class="full-width">
+                        Description
+                        <textarea name="description" maxlength="500"
+                                  rows="3"></textarea>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Create Event
+                        </button>
+                    </div>
+                </form>
+
+                <div id="events-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- REGISTRATIONS -->
+        <section id="registrations" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Event Registrations</h2>
+                        <p>Register students for events</p>
+                    </div>
+                </div>
+
+                <form id="registration-form" class="form-grid">
+                    <label>
+                        Student *
+                        <select name="student_id" id="registration-student"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Event *
+                        <select name="event_id" id="registration-event"
+                                required></select>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Register Student
+                        </button>
+                    </div>
+                </form>
+
+                <div id="registrations-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- ATTENDANCE -->
+        <section id="attendance" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Event Attendance</h2>
+                        <p>Record attendance against an existing registration</p>
+                    </div>
+                </div>
+
+                <form id="attendance-form" class="form-grid">
+                    <label>
+                        Registration *
+                        <select name="registration_id"
+                                id="attendance-registration"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Attendance Status *
+                        <select name="attendance_status">
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                        </select>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Save Attendance
+                        </button>
+                    </div>
+                </form>
+
+                <div id="attendance-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- FEEDBACK -->
+        <section id="feedback" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Event Feedback</h2>
+                        <p>Collect student ratings and comments</p>
+                    </div>
+                </div>
+
+                <form id="feedback-form" class="form-grid">
+                    <label>
+                        Student *
+                        <select name="student_id" id="feedback-student"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Event *
+                        <select name="event_id" id="feedback-event"
+                                required></select>
+                    </label>
+
+                    <label>
+                        Rating *
+                        <select name="rating">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="3">3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Poor</option>
+                        </select>
+                    </label>
+
+                    <label class="full-width">
+                        Comments
+                        <textarea name="comments" maxlength="1000"
+                                  rows="3"></textarea>
+                    </label>
+
+                    <div class="full-width">
+                        <button class="button primary" type="submit">
+                            Submit Feedback
+                        </button>
+                    </div>
+                </form>
+
+                <div id="feedback-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Resource Management</h2>
+                        <p>Available resources and event bookings</p>
+                    </div>
+                </div>
+
+                <h3 class="subheading">Resources</h3>
+                <div id="resources-content" class="table-container"></div>
+
+                <h3 class="subheading">Resource Bookings</h3>
+                <div id="resource-bookings-content"
+                     class="table-container"></div>
+            </div>
+        </section>
+
+        <!-- FINANCE -->
+        <section id="finance" class="page">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Finance & Sponsorships</h2>
+                        <p>Monitor budgets, expenses and sponsor contributions</p>
+                    </div>
+                </div>
+
+                <h3 class="subheading">Budgets</h3>
+                <div id="budgets-content" class="table-container"></div>
+
+                <h3 class="subheading">Expenses</h3>
+                <div id="expenses-content" class="table-container"></div>
+
+                <h3 class="subheading">Sponsors</h3>
+                <div id="sponsors-content" class="table-container"></div>
+
+                <h3 class="subheading">Sponsorships</h3>
+                <div id="sponsorships-content" class="table-container"></div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Database System Project · Club and Chapter Management System
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
